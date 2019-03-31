@@ -10,42 +10,46 @@
 
 #include <fstream>
 
-class config {
+class config
+    {
 private:
     std::string filename;
 public:
     std::map<std::string, std::string> m;
 
-    config(const std::string &filename) : filename(filename) {
+    explicit config (const std::string &filename) : filename(filename)
+    {
         std::ifstream file(filename);
         if (file.is_open()) {
             std::string tmp_str;
             while (std::getline(file, tmp_str)) {
-                int x = tmp_str.find(':');
-                m[tmp_str.substr(0, x)] = tmp_str.substr(x+1, tmp_str.length());
+                size_t x = tmp_str.find(':');
+                m[tmp_str.substr(0, x)] = tmp_str.substr(x + 1, tmp_str.length());
 
             }
             file.close();
         } else {
-            throw std::invalid_argument( "config file not found" );
+            throw std::invalid_argument("config file not found");
         }
     }
 
-    double get_double(std::string query) {
+    double get_double (const std::string &query)
+    {
         try {
             return std::stod(m[query]);
-        } catch (const std::invalid_argument& e) {
-            throw std::invalid_argument(query+" has invalid value for double or not in config file");
+        } catch (const std::invalid_argument &e) {
+            throw std::invalid_argument(query + " has invalid value for double or not in config file");
         }
     }
 
-    int get_int(std::string query) {
+    int get_int (const std::string &query)
+    {
         try {
             return std::stoi(m[query]);
-        } catch (const std::invalid_argument& e) {
-            throw std::invalid_argument(query+" has invalid value for int or not in config file");
+        } catch (const std::invalid_argument &e) {
+            throw std::invalid_argument(query + " has invalid value for int or not in config file");
         }
     }
-};
+    };
 
 #endif //INTEGRAL_CONFIG_READER_H
